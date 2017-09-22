@@ -8,6 +8,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+//#include <netinet/if_ether.h>
+//#include <netinet/ip.h>
+//#include <netinet/tcp.h>
 #include <arpa/inet.h>
 
 #define SNAP_LEN 1518
@@ -63,6 +66,8 @@ struct sniff_tcp {
         u_short th_sum;                 /* checksum */
         u_short th_urp;                 /* urgent pointer */
 };
+
+void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
 
 void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
@@ -160,22 +165,28 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 		}
 		count++;
 
-		if(is_image_included)
+/*		if(is_image_included)
 		{
+			printf("Image included\n");
 			FILE *out;
-
-			char *extension = ".jpeg";
-			char fname[20];
-			sprintf(fname, "%d", count);
-			strcat(fname, extension);
-			char dir[30] = "/img/";
-			strcat(dir, fname);
-
-			out = fopen(dir, "w");
+			char *img;
+			int i=0;
+			printf("payload size: %d, httpheader size: %d\n", size_payload, http_hsize);
+			img = (char*)calloc(size_payload-http_hsize, sizeof(char));
+			printf("calloced size: %d\n", size_payload-http_hsize);
 			for(int i=0; i<size_payload-http_hsize; i++)
-				fputc(*payload, out);
+			{
+				img[i] = *payload;
+				printf("%x ", *payload);
+				if(i%16 == 1) printf("\n");
+				if(i>100) break;
+			}
+			out = fopen("output.jpeg", "wb");
+			printf("IMAGE SAVING...\n\n");
+			fwrite(img, sizeof(char), sizeof(img)/sizeof(char), out);
 			fclose(out);
-		}
+			free(img);
+		}*/
 	}
 
 	return;

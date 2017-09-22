@@ -2,17 +2,14 @@
 
 int main()
 {
-	FILE *fp = fopen("testimg.jpeg", "r");
-	FILE *out = fopen("testout.jpeg", "w");
+	FILE *fp = fopen("packetsniff.c", "r");
+	FILE *out = fopen("./img/here.c", "w");
 	int count = 0;
 	while(!feof(fp))
 	{
 		char c = fgetc(fp);
 		printf("%c ", c);
 		fputc(c, out);
-		count++;
-		if(count % 8 == 0) printf("  ");
-		if(count % 32 == 0)
 		{
 			printf("\n%d: ", count);
 		}
